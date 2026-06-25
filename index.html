@@ -15,7 +15,6 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            /* Fon endi oppoq emas, juda chiroyli mayin pushti */
             background: #fff0f2; 
             color: #4a3736;
             min-height: 100vh;
@@ -73,7 +72,7 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0 { transform: scale(1); }
             50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
@@ -240,11 +239,13 @@
 </head>
 <body>
 
+    <!-- Fon musiqasi (Mayin Lofi / Soft Piano) -->
     <audio id="bgMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <div class="container">
+        <!-- Musiqa boshqaruvi -->
         <div class="music-control" onclick="toggleMusic()">
             <span id="musicIcon">🎵</span> <span id="musicText">Musiqani qo'shish</span>
         </div>
@@ -259,8 +260,10 @@
             <div class="signature">Tez orada ko'rishguncha...</div>
         </div>
 
-        <form id="planForm" action="https://formspree.io/f/YOUR_ENDPOINT_ID" method="POST" onsubmit="generatePlan(event)">
+        <!-- Formspree bog'langan forma -->
+        <form id="planForm" action="https://formspree.io/f/xeebebny" method="POST" onsubmit="generatePlan(event)">
             
+            <!-- 1. QAYERGA BORAMIZ -->
             <div class="section-title">📍 Qayerga boramiz? (O'zing tanla)</div>
             <div class="interactive-grid">
                 <div class="option-card" onclick="selectRadio(this, 'Joy')">
@@ -275,4 +278,119 @@
                     <input type="radio" name="Joy" value="Ark Qal'asi atrofida sayr">
                 </div>
 
-                <div class="option-card" onclick="selectRadio(this, 'Joy
+                <div class="option-card" onclick="selectRadio(this, 'Joy')">
+                    <div class="option-title">🌳 Buxoro Madaniyat va istirohat bog'i</div>
+                    <div class="option-desc">Zamonaviy, yashillikka burkangan bog'da mazza qilib suhbatlashib yuramiz.</div>
+                    <input type="radio" name="Joy" value="Buxoro istirohat bog'i">
+                </div>
+            </div>
+
+            <!-- 2. NIMA YEYMIZ -->
+            <div class="section-title">🍔 Nima ovqat yeymiz?</div>
+            <div class="interactive-grid">
+                <div class="option-card" onclick="selectRadio(this, 'Ovqat')">
+                    <div class="option-title">🍕 Fast Food (Pitsa, Burger, Fri...)</div>
+                    <div class="option-desc">Eng shirin fast-foodlar, qarsildoq fri va mazali pitsa bilan mazza qilamiz.</div>
+                    <input type="radio" name="Ovqat" value="Fast Food (Pitsa, Burger)" required>
+                </div>
+                
+                <div class="option-card" onclick="selectRadio(this, 'Ovqat')">
+                    <div class="option-title">🇺🇿 Milliy taomlar (Buxorocha Palov yoki Kabob)</div>
+                    <div class="option-desc">Haqiqiy shohona Buxorocha palov yoki og'izda eriydigan issiqqina kaboblar.</div>
+                    <input type="radio" name="Ovqat" value="Milliy taomlar (Buxorocha Palov/Kabob)">
+                </div>
+            </div>
+
+            <!-- 3. DESERT -->
+            <div class="section-title">🍓 Desertga nima xohlaysan?</div>
+            <div class="interactive-grid">
+                <div class="option-card" onclick="toggleCheckbox(this)">
+                    <div class="option-title">🍎 1. Quritilgan mevalar</div>
+                    <div class="option-desc">Choy bilan ichishga foydali va shirin quritilgan mevalar to'plami.</div>
+                    <input type="checkbox" name="Desert_1" value="Quritilgan mevalar">
+                </div>
+                
+                <div class="option-card" onclick="toggleCheckbox(this)">
+                    <div class="option-title">🧀 2. Qurt va pishloqli tayoqchalar</div>
+                    <div class="option-desc">Sho'rgina qurt va cho'ziladigan issiq pishloqli tayoqchalar (sirniy palochka).</div>
+                    <input type="checkbox" name="Desert_2" value="Qurt va sirniy palochka">
+                </div>
+
+                <div class="option-card" onclick="toggleCheckbox(this)">
+                    <div class="option-title">🍫 3. Shokoladli qulupnay</div>
+                    <div class="option-desc">Eng shirin va romantik shokoladga botirilgan yangi qulupnaylar.</div>
+                    <input type="checkbox" name="Desert_3" value="Shokoladli qulupnay">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Rejani tasdiqlash ✨</button>
+        </form>
+
+        <div id="result" class="result-box">
+            <div class="result-title">Bizning mukammal kunimiz! 🥰</div>
+            <div id="resultText" class="result-text"></div>
+        </div>
+    </div>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                document.getElementById('musicIcon').innerText = '⏸️';
+                document.getElementById('musicText').innerText = 'Musiqani o\'chirish';
+            } else {
+                music.pause();
+                document.getElementById('musicIcon').innerText = '🎵';
+                document.getElementById('musicText').innerText = 'Musiqani qo\'shish';
+            }
+        }
+
+        function selectRadio(element, name) {
+            const cards = element.parentElement.querySelectorAll('.option-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            const input = element.querySelector('input[type="radio"]');
+            input.checked = true;
+        }
+
+        function toggleCheckbox(element) {
+            const input = element.querySelector('input[type="checkbox"]');
+            input.checked = !input.checked;
+            if (input.checked) {
+                element.classList.add('selected');
+            } else {
+                element.classList.remove('selected');
+            }
+        }
+
+        function generatePlan(event) {
+            event.preventDefault();
+            
+            const place = document.querySelector('input[name="Joy"]:checked').value;
+            const food = document.querySelector('input[name="Ovqat"]:checked').value;
+            
+            const desserts = [];
+            if(document.querySelector('input[name="Desert_1"]').checked) desserts.push("Quritilgan mevalar");
+            if(document.querySelector('input[name="Desert_2"]').checked) desserts.push("Qurt va sirniy palochka");
+            if(document.querySelector('input[name="Desert_3"]').checked) desserts.push("Shokoladli qulupnay");
+
+            let dessertText = desserts.length > 0 ? desserts.join(', ') : "O'zing xohlagan boshqa shirinlik";
+
+            const resultText = `Vau, ajoyib tanlov! Demak, men Buxoroga borishim bilan barcha g'amginliklarni unutib, birga <b>${place}</b>ga boramiz. Keyin mazza qilib <b>${food}</b> yeymiz. Shundan so'ng, desertga <b>${dessertText}</b> bilan kunimizni yanada shirin qilamiz! Men senga buni va'da beraman! ❤️`;
+            
+            document.getElementById('resultText').innerHTML = resultText;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
+            const form = document.getElementById('planForm');
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            });
+        }
+    </script>
+</body>
+</html>
