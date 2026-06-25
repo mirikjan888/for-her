@@ -15,7 +15,8 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: #fdf8f5;
+            /* Fon endi oppoq emas, juda chiroyli mayin pushti */
+            background: #fff0f2; 
             color: #4a3736;
             min-height: 100vh;
             display: flex;
@@ -31,11 +32,35 @@
             max-width: 550px;
             background: #ffffff;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(224, 169, 175, 0.3);
+            box-shadow: 0 10px 30px rgba(234, 182, 188, 0.4);
             padding: 30px 20px;
             margin-top: 20px;
-            border: 1px solid #f3e1e1;
+            border: 1px solid #fbdbe0;
             position: relative;
+        }
+
+        /* Musiqa boshqaruv tugmasi */
+        .music-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #fff0f2;
+            border: 1px solid #e0a9af;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+            color: #d15668;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            background: #e0a9af;
+            color: white;
         }
 
         .header-heart {
@@ -44,6 +69,7 @@
             color: #d15668;
             animation: pulse 1.5s infinite;
             margin-bottom: 15px;
+            margin-top: 15px;
         }
 
         @keyframes pulse {
@@ -52,13 +78,12 @@
             100% { transform: scale(1); }
         }
 
-        /* Kitob varag'i uslubidagi maktub */
         .book-page {
-            background: #fffdfa;
+            background: #fffdfc;
             border-left: 4px solid #d15668;
             padding: 20px;
             border-radius: 4px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.02), 2px 2px 8px rgba(0,0,0,0.05);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.01), 2px 2px 8px rgba(0,0,0,0.04);
             margin-bottom: 30px;
             position: relative;
         }
@@ -98,21 +123,20 @@
             font-weight: 600;
         }
 
-        /* Interaktiv qismlar */
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: 18px;
             color: #8c3a46;
             margin: 25px 0 15px 0;
             text-align: center;
-            border-bottom: 1px dashed #f0ced2;
+            border-bottom: 1px dashed #fbdbe0;
             padding-bottom: 8px;
             font-weight: 600;
         }
 
         .option-card {
             background: #fff;
-            border: 2px solid #f3e1e1;
+            border: 2px solid #fbe6e8;
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 12px;
@@ -130,8 +154,8 @@
 
         .option-card.selected {
             border-color: #d15668;
-            background: #fff5f6;
-            box-shadow: 0 4px 12px rgba(209, 86, 104, 0.15);
+            background: #fff2f4;
+            box-shadow: 0 4px 12px rgba(209, 86, 104, 0.12);
         }
 
         .option-card input[type="radio"],
@@ -185,7 +209,7 @@
 
         .result-box {
             display: none;
-            background: #fff5f6;
+            background: #fff2f4;
             border: 2px dashed #d15668;
             border-radius: 15px;
             padding: 20px;
@@ -216,7 +240,15 @@
 </head>
 <body>
 
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="container">
+        <div class="music-control" onclick="toggleMusic()">
+            <span id="musicIcon">🎵</span> <span id="musicText">Musiqani qo'shish</span>
+        </div>
+
         <div class="header-heart">❤️</div>
         
         <div class="book-page">
@@ -227,113 +259,20 @@
             <div class="signature">Tez orada ko'rishguncha...</div>
         </div>
 
-        <form id="planForm" onsubmit="generatePlan(event)">
+        <form id="planForm" action="https://formspree.io/f/YOUR_ENDPOINT_ID" method="POST" onsubmit="generatePlan(event)">
+            
             <div class="section-title">📍 Qayerga boramiz? (O'zing tanla)</div>
             <div class="interactive-grid">
-                <div class="option-card" onclick="selectRadio(this, 'place')">
+                <div class="option-card" onclick="selectRadio(this, 'Joy')">
                     <div class="option-title">🕌 Labi Hovuz va Eski Shahar</div>
                     <div class="option-desc">Chiroyli chiroqlar ostida, tarixiy va sokin muhitda aylanib, rasmga tushamiz.</div>
-                    <input type="radio" name="place" value="Labi Hovuz va Eski Shahar" required>
+                    <input type="radio" name="Joy" value="Labi Hovuz va Eski Shahar" required>
                 </div>
                 
-                <div class="option-card" onclick="selectRadio(this, 'place')">
+                <div class="option-card" onclick="selectRadio(this, 'Joy')">
                     <div class="option-title">🏰 Ark Qal'asi atrofida sayr</div>
                     <div class="option-desc">Buxoroning eng ulug'vor maskanida aylanib, kechki salqin havodan zavqlanamiz.</div>
-                    <input type="radio" name="place" value="Ark Qal'asi atrofida sayr">
+                    <input type="radio" name="Joy" value="Ark Qal'asi atrofida sayr">
                 </div>
 
-                <div class="option-card" onclick="selectRadio(this, 'place')">
-                    <div class="option-title">🌳 Buxoro Madaniyat va istirohat bog'i</div>
-                    <div class="option-desc">Zamonaviy, yashillikka burkangan bog'da mazza qilib suhbatlashib yuramiz.</div>
-                    <input type="radio" name="place" value="Buxoro istirohat bog'i">
-                </div>
-            </div>
-
-            <div class="section-title">🍔 Nima ovqat yeymiz?</div>
-            <div class="interactive-grid">
-                <div class="option-card" onclick="selectRadio(this, 'food')">
-                    <div class="option-title">🍕 Fast Food (Pitsa, Burger, Fri...)</div>
-                    <div class="option-desc">Eng shirin fast-foodlar, qarsildoq fri va mazali pitsa bilan mazza qilamiz.</div>
-                    <input type="radio" name="food" value="Fast Food (Pitsa, Burger)" required>
-                </div>
-                
-                <div class="option-card" onclick="selectRadio(this, 'food')">
-                    <div class="option-title">🇺🇿 Milliy taomlar (Buxorocha Palov yoki Kabob)</div>
-                    <div class="option-desc">Haqiqiy shohona Buxorocha palov yoki og'izda eriydigan issiqqina kaboblar.</div>
-                    <input type="radio" name="food" value="Milliy taomlar (Buxorocha Palov/Kabob)">
-                </div>
-            </div>
-
-            <div class="section-title">🍓 Desertga nima xohlaysan?</div>
-            <div class="interactive-grid">
-                <div class="option-card" onclick="toggleCheckbox(this)">
-                    <div class="option-title">🍎 1. Quritilgan mevalar</div>
-                    <div class="option-desc">Choy bilan ichishga foydali va shirin quritilgan mevalar to'plami.</div>
-                    <input type="checkbox" name="dessert" value="Quritilgan mevalar">
-                </div>
-                
-                <div class="option-card" onclick="toggleCheckbox(this)">
-                    <div class="option-title">🧀 2. Qurt va pishloqli tayoqchalar</div>
-                    <div class="option-desc">Sho'rgina qurt va cho'ziladigan issiq pishloqli tayoqchalar (sirniy palochka).</div>
-                    <input type="checkbox" name="dessert" value="Qurt va sirniy palochka">
-                </div>
-
-                <div class="option-card" onclick="toggleCheckbox(this)">
-                    <div class="option-title">🍫 3. Shokoladli qulupnay</div>
-                    <div class="option-desc">Eng shirin va romantik shokoladga botirilgan yangi qulupnaylar.</div>
-                    <input type="checkbox" name="dessert" value="Shokoladli qulupnay">
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit">Rejani tasdiqlash ✨</button>
-        </form>
-
-        <div id="result" class="result-box">
-            <div class="result-title">Bizning mukammal kunimiz! 🥰</div>
-            <div id="resultText" class="result-text"></div>
-        </div>
-    </div>
-
-    <script>
-        function selectRadio(element, name) {
-            const cards = element.parentElement.querySelectorAll('.option-card');
-            cards.forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            
-            const input = element.querySelector('input[type="radio"]');
-            input.checked = true;
-        }
-
-        function toggleCheckbox(element) {
-            const input = element.querySelector('input[type="checkbox"]');
-            input.checked = !input.checked;
-            if (input.checked) {
-                element.classList.add('selected');
-            } else {
-                element.classList.remove('selected');
-            }
-        }
-
-        function generatePlan(event) {
-            event.preventDefault();
-            
-            const place = document.querySelector('input[name="place"]:checked').value;
-            const food = document.querySelector('input[name="food"]:checked').value;
-            
-            const desserts = [];
-            document.querySelectorAll('input[name="dessert"]:checked').forEach(cb => {
-                desserts.push(cb.value);
-            });
-
-            let dessertText = desserts.length > 0 ? desserts.join(', ') : "O'zing xohlagan boshqa shirinlik";
-
-            const resultText = `Vau, ajoyib tanlov! Demak, men Buxoroga borishim bilan biz birga <b>${place}</b>ga boramiz. Keyin mazza qilib <b>${food}</b> yeymiz. Shundan so'ng, desertga <b>${dessertText}</b> bilan kunimizni yanada shirin qilamiz! Eng muhimi, sen doim mana shunday tabassum qilib yurasan, erkatoyim! ❤️`;
-            
-            document.getElementById('resultText').innerHTML = resultText;
-            document.getElementById('result').style.display = 'block';
-            
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
-</body>
-</html>
+                <div class="option-card" onclick="selectRadio(this, 'Joy
